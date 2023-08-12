@@ -1,6 +1,6 @@
 package com.example.SpringScheduler.service;
 
-import com.example.SpringScheduler.Post; // Import the Post class
+import com.example.SpringScheduler.entities.Post; // Import the Post class
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

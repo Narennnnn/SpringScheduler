@@ -1,5 +1,6 @@
 package com.example.SpringScheduler.service;
 
+import com.example.SpringScheduler.Post; // Import the Post class
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -10,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays; // Import for Arrays
+import java.util.List; // Import for List
+
 @Service
 @Slf4j
 public class ResourceService {
@@ -18,12 +22,12 @@ public class ResourceService {
     @Autowired
     private RestTemplate restTemplate;
 
-
-    public Object getAllData() {
+    public List<Post> getAllData() {
         try {
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-            log.info(response.getBody());
-            return response.getBody();
+            ResponseEntity<Post[]> response = restTemplate.exchange(url, HttpMethod.GET, null, Post[].class);
+            List<Post> posts = Arrays.asList(response.getBody()); // Convert array to List
+            log.info("Fetched {} posts", posts.size());
+            return posts;
         } catch (Exception e) {
             log.error("Something went wrong!", e);
             throw new ResponseStatusException(

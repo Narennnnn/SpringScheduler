@@ -1,14 +1,11 @@
 package com.example.SpringScheduler.service;
 
 import com.example.SpringScheduler.model.Post;
+import com.example.SpringScheduler.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -17,29 +14,24 @@ public class ApiServiceImpl implements ApiService {
     private final String apiUrl = "https://jsonplaceholder.typicode.com";
 
     private final RestTemplate restTemplate;
+    private final PostRepository postRepository;
 
     @Autowired
-    public ApiServiceImpl(RestTemplate restTemplate) {
+    public ApiServiceImpl(RestTemplate restTemplate, PostRepository postRepository) {
         this.restTemplate = restTemplate;
+        this.postRepository = postRepository;
     }
 
     @Override
     public List<Post> fetchPosts() {
-        List<Post> posts = new ArrayList<>();
-        try {
-            Post[] postsArray = restTemplate.getForObject(apiUrl + "/posts", Post[].class);
-            if (postsArray != null) {
-                posts.addAll(Arrays.asList(postsArray));
-            }
-        } catch (HttpClientErrorException ex) {
-            if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
-                System.err.println("Resource not found: " + ex.getStatusText());
-            } else {
-                System.err.println("HTTP error: " + ex.getStatusCode() + " - " + ex.getStatusText());
-            }
-        } catch (Exception e) {
-            System.err.println("Error fetching posts: " + e.getMessage());
-        }
+        // Fetch posts from the API and return them
+        List<Post> posts = restTemplate.getForObject(apiUrl + "/posts", List.class);
         return posts;
+    }
+
+    @Override
+    public void savePosts(List<Post> posts) {
+        // Save the fetched posts to the database
+        postRepository.saveAll(posts);
     }
 }

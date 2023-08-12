@@ -1,4 +1,9 @@
 package com.example.SpringScheduler.service;
 
-public class ApiService {
+import com.example.SpringScheduler.model.Post;
+
+import java.util.List;
+
+public interface ApiService {
+    List<Post> fetchPosts();
 }

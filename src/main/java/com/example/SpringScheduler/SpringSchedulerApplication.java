@@ -8,7 +8,6 @@ public class SpringSchedulerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringSchedulerApplication.class, args);
-		//System.out.println("Testing");
 	}
 
 }

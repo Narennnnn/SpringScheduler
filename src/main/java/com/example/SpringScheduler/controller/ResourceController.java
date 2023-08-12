@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResourceController {
     private final ResourceService resourceService;
 
-    @GetMapping(value = "/get-all-fake-posts") // Change the URL mapping
+    @GetMapping(value = "/get-all-fake-posts")
     public ResponseEntity<?> callRapidEndPointToGetFakePosts() {
-        return ResponseEntity.ok(resourceService.getAllData()); // Change the method call
+        return ResponseEntity.ok(resourceService.getAllData());
     }
 }

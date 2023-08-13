@@ -1,18 +1,18 @@
 package com.example.SpringScheduler.service;
 
-import com.example.SpringScheduler.entities.Post; // Import the Post class
+import com.example.SpringScheduler.PostRepository;
+import com.example.SpringScheduler.entities.Post;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
 import org.springframework.http.HttpStatus;
-
-import java.util.Arrays; // Import for Arrays
-import java.util.List; // Import for List
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -22,12 +22,20 @@ public class ResourceService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public List<Post> getAllData() {
+    @Autowired
+    private PostRepository postRepository;
+
+    @Scheduled(fixedRate = 20000)
+    public void fetchDataAndSaveToDatabase() {
         try {
             ResponseEntity<Post[]> response = restTemplate.exchange(url, HttpMethod.GET, null, Post[].class);
-            List<Post> posts = Arrays.asList(response.getBody()); // Convert array to List
+            List<Post> posts = Arrays.asList(response.getBody());
             log.info("Fetched {} posts", posts.size());
-            return posts;
+
+            // Save all fetched posts to the database
+            postRepository.saveAll(posts);
+
+            log.info("Saved fetched posts to the database");
         } catch (Exception e) {
             log.error("Something went wrong!", e);
             throw new ResponseStatusException(

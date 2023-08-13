@@ -29,7 +29,7 @@ A dynamic data retrieval system built using Java and Spring Boot that fetches da
 
 ## Usage
 
-- The application fetches data from a fake API every 20 seconds and stores it in the database.
+- The application fetches data from a fake API every 20 seconds(flexible) and stores it in the database.
 - Access the endpoint to fetch and store data: `GET /SpringScheduler/get-all-fake-posts`
 
 ## Contribution
